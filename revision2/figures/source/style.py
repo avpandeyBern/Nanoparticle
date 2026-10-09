@@ -167,9 +167,15 @@ def chip(ax, x, y, w, h, text, fc, tc="white", fs=8.0, weight="semibold", r=0.03
             fontsize=fs, color=tc, fontweight=weight, zorder=5)
 
 def save(fig, path):
+    # Resolve relative names against this file's directory so the scripts can be
+    # run from any working directory without scattering output.
+    import os
+    path = str(path)
+    if not os.path.isabs(path):
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), path)
     fig.savefig(path, dpi=600, facecolor="white", bbox_inches="tight",
                 pad_inches=0.06)
-    fig.savefig(str(path).replace(".png", ".pdf"), facecolor="white",
+    fig.savefig(path.replace(".png", ".pdf"), facecolor="white",
                 bbox_inches="tight", pad_inches=0.06)
     plt.close(fig)
     print("wrote", path)
